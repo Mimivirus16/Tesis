@@ -4,7 +4,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.integrate import odeint
-
+import sympy as sm
+from sympy.solvers import solve 
 # Variables del sistema: A=Ameba, M= Mimivirus , V= Virófago, V_T= Virófago con transpoviron , M_T= Mimivirus con Transpoviron
 
 #Sistema dinámico
@@ -83,58 +84,58 @@ plt.plot(t,y, label=('A','M','V','Ai','Aiv','Apro','Aprom','Mpro','Aco','dMt','d
 plt.legend()
 plt.show()
 
-  #Reescritura para usar el paquete Sympy
-    A,M,V,Ai,Aiv,Apro,Aprom,Mpro,Aco,Mt,Vt,Ait,Aitv,Apromt,Acot=sm.symbols('A,M,V,Ai,Aiv,Apro,Aprom,Mpro,Aco,Mt,Vt,Ait,Aitv,Apromt,Acot')
-    
-    L=1+(A+Ai+Aiv+Apro+Aprom+Aco+Ait+Aitv+Apromt+Acot)/K #Crecimiento logístico
-    
-    dA=(A*(r-(beta*L)))-(gamma*M*A)-(kappa*V*A)-(delta*A*M*V)-(gamma*Mpro*A)-(gamma*Mt*A)-((delta*A*((Vt* M) + (V* Mt) + (Vt* Mt))))
-    
-    dM=(nu*Aco)+(zeta*Ai)-(gamma*M*A)-(delta*A*M*V)-(gamma*Apro*M)-(eta*M)-(delta *A *Vt* M)
-    
-    dV= (iota*Aiv)+(nu*Aco)+(mu*Aprom)-(epsilon*Ai*V)-(kappa*V*A)-(delta*A*M*V)-(delta*Mt*V)-(lamda*V)-(epsilon*Ait*V)
-    
-    dAi=(gamma*M*A)-(rho*L*Ai)-(epsilon*Ai*V)-(epsilon*Vt*Ai)
-    
-    dAiv=(epsilon*Ai*V)-(sigma*L*Aiv)
-    
-    dApro=(Apro*(r-(beta*L)))+(kappa*V*A)-(gamma*M*Apro)-(gamma*Mt*Apro)
-    
-    dAprom=(gamma*M*Apro)-(tau*L*Aprom)
-    
-    dMpro=(nu*Aco)-(phi*Mpro)-(gamma*Mpro*A)
-    
-    dAco=(delta*A*M*V)+(gamma*Mpro*A)-(chi*L*Aco)
-    
-    dMt= (zeta2 * Ait* Mt) + (zeta3 * Aitv)  + (nu2* Aco) - (gamma* Mt* (A+Apro))-(delta*Mt*V)-(delta*Mt*Vt) - (eta* Mt)
-    
-    dVt= (iota2*Apromt) + (iota3* Aitv)  +  (nu2* Aco)- (epsilon *Vt *(Ai+Ait))-(delta*M*Vt)-(delta*Mt*Vt)-(lamda *Vt)
-    
-    dAit= (gamma* ((Mt*A) + Apro )) - (rho*L*Ait)  - (epsilon* Ait * (V+Vt))
-    
-    dAitv= (epsilon*(Vt*(Ai+ Ait) + (V *Ait) ))- (sigma*L*Aitv) 
-    
-    dApromt= (gamma* Apro * Mt) - (tau *L* Apromt)
-    
-    dAcot=(delta *A *((Vt* M) + (V* Mt) + (Vt* Mt))) - (chi*L*Acot)
-    
-    #Usando Eq para que resuelva con respecto  a 0.
-    AEqn=sm.Eq(A,0)
-    MEqn=sm.Eq(M,0)
-    VEqn=sm.Eq(V,0)
-    AiEqn=sm.Eq(Ai,0)
-    AivEqn=sm.Eq(Aiv,0)
-    AproEqn=sm.Eq(Apro,0)
-    ApromEqn=sm.Eq(Aprom,0)
-    MproEqn=sm.Eq(Mpro,0)
-    AcoEqn=sm.Eq(Aco,0)
-    MtEqn=sm.Eq(Mt,0)
-    VtEqn=sm.Eq(Vt,0)
-    AitEqn=sm.Eq(Ait,0)
-    AitvEqn=sm.Eq(Aitv,0)
-    ApromtEqn=sm.Eq(Apromt,0)
-    AcotEqn=sm.Eq(Acot,0)
-    
-    #Resolviendo los puntos críticos
-               criticalpoints=sm.solve((AEqn,MEqn,VEqn,AiEqn,AivEqn,AproEqn,ApromEqn,MproEqn,AcoEqn,MtEqn,VtEqn,AitEqn,AitvEqn,ApromtEqn,AcotEqn ),A,M,V,Ai,Aiv,Apro,Aprom,Mpro,Aco,Mt,Vt,Ait,Aitv,Apromt,Acot )
-    print(criticalpoints)
+#Reescritura para usar el paquete Sympy
+A,M,V,Ai,Aiv,Apro,Aprom,Mpro,Aco,Mt,Vt,Ait,Aitv,Apromt,Acot=sm.symbols('A,M,V,Ai,Aiv,Apro,Aprom,Mpro,Aco,Mt,Vt,Ait,Aitv,Apromt,Acot')
+
+L=1+(A+Ai+Aiv+Apro+Aprom+Aco+Ait+Aitv+Apromt+Acot)/K #Crecimiento logístico
+
+dA=(A*(r-(beta*L)))-(gamma*M*A)-(kappa*V*A)-(delta*A*M*V)-(gamma*Mpro*A)-(gamma*Mt*A)-((delta*A*((Vt* M) + (V* Mt) + (Vt* Mt))))
+
+dM=(nu*Aco)+(zeta*Ai)-(gamma*M*A)-(delta*A*M*V)-(gamma*Apro*M)-(eta*M)-(delta *A *Vt* M)
+
+dV= (iota*Aiv)+(nu*Aco)+(mu*Aprom)-(epsilon*Ai*V)-(kappa*V*A)-(delta*A*M*V)-(delta*Mt*V)-(lamda*V)-(epsilon*Ait*V)
+
+dAi=(gamma*M*A)-(rho*L*Ai)-(epsilon*Ai*V)-(epsilon*Vt*Ai)
+
+dAiv=(epsilon*Ai*V)-(sigma*L*Aiv)
+
+dApro=(Apro*(r-(beta*L)))+(kappa*V*A)-(gamma*M*Apro)-(gamma*Mt*Apro)
+
+dAprom=(gamma*M*Apro)-(tau*L*Aprom)
+
+dMpro=(nu*Aco)-(phi*Mpro)-(gamma*Mpro*A)
+
+dAco=(delta*A*M*V)+(gamma*Mpro*A)-(chi*L*Aco)
+
+dMt= (zeta2 * Ait* Mt) + (zeta3 * Aitv)  + (nu2* Aco) - (gamma* Mt* (A+Apro))-(delta*Mt*V)-(delta*Mt*Vt) - (eta* Mt)
+
+dVt= (iota2*Apromt) + (iota3* Aitv)  +  (nu2* Aco)- (epsilon *Vt *(Ai+Ait))-(delta*M*Vt)-(delta*Mt*Vt)-(lamda *Vt)
+
+dAit= (gamma* ((Mt*A) + Apro )) - (rho*L*Ait)  - (epsilon* Ait * (V+Vt))
+
+dAitv= (epsilon*(Vt*(Ai+ Ait) + (V *Ait) ))- (sigma*L*Aitv) 
+
+dApromt= (gamma* Apro * Mt) - (tau *L* Apromt)
+
+dAcot=(delta *A *((Vt* M) + (V* Mt) + (Vt* Mt))) - (chi*L*Acot)
+
+#Usando Eq para que resuelva con respecto  a 0.
+AEqn=sm.Eq(A,0)
+MEqn=sm.Eq(M,0)
+VEqn=sm.Eq(V,0)
+AiEqn=sm.Eq(Ai,0)
+AivEqn=sm.Eq(Aiv,0)
+AproEqn=sm.Eq(Apro,0)
+ApromEqn=sm.Eq(Aprom,0)
+MproEqn=sm.Eq(Mpro,0)
+AcoEqn=sm.Eq(Aco,0)
+MtEqn=sm.Eq(Mt,0)
+VtEqn=sm.Eq(Vt,0)
+AitEqn=sm.Eq(Ait,0)
+AitvEqn=sm.Eq(Aitv,0)
+ApromtEqn=sm.Eq(Apromt,0)
+AcotEqn=sm.Eq(Acot,0)
+
+#Resolviendo los puntos críticos
+criticalpoints=sm.solve((AEqn,MEqn,VEqn,AiEqn,AivEqn,AproEqn,ApromEqn,MproEqn,AcoEqn,MtEqn,VtEqn,AitEqn,AitvEqn,ApromtEqn,AcotEqn ),A,M,V,Ai,Aiv,Apro,Aprom,Mpro,Aco,Mt,Vt,Ait,Aitv,Apromt,Acot )
+print(criticalpoints)
