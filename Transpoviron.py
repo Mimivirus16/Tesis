@@ -4,7 +4,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.integrate import odeint
-from scipy.optimize import fsolve
 
 # Variables del sistema: A=Ameba, M= Mimivirus , V= Virófago, V_T= Virófago con transpoviron , M_T= Mimivirus con Transpoviron
 
