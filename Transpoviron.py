@@ -77,7 +77,7 @@ def Transpoviron(x,t):
     return dA,dM,dV,dAi,dAiv,dApro,dAprom,dMpro,dAco,dMt,dVt,dAit,dAitv,dApromt,dAcot
 
 A0=(2e3,2e3,2e3,2e3,2e3,2e3,2e3,2e3,2e3,2e3,2e3,2e3,2e3,2e3,2e3)
-t=np.linspace(0,500,10000)
+t=np.linspace(0,7,10000)
 y=odeint(Transpoviron,A0,t)
 plt.figure()
 plt.plot(t,y, label=('A','M','V','Ai','Aiv','Apro','Aprom','Mpro','Aco','dMt','dVt','dAit','dAitv','dApromt','dAcot'))
