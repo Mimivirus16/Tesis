@@ -77,7 +77,7 @@ def Transpoviron(x,t):
     return dA,dM,dV,dAi,dAiv,dApro,dAprom,dMpro,dAco,dMt,dVt,dAit,dAitv,dApromt,dAcot
 
 A0=(2e3,2e3,2e3,2e3,2e3,2e3,2e3,2e3,2e3,2e3,2e3,2e3,2e3,2e3,2e3)
-t=np.linspace(0,7,10000)
+t=np.linspace(0,20,1000000)
 y=odeint(Transpoviron,A0,t)
 plt.figure()
 plt.plot(t,y, label=('A','M','V','Ai','Aiv','Apro','Aprom','Mpro','Aco','dMt','dVt','dAit','dAitv','dApromt','dAcot'))
@@ -88,36 +88,36 @@ plt.show()
 A,M,V,Ai,Aiv,Apro,Aprom,Mpro,Aco,Mt,Vt,Ait,Aitv,Apromt,Acot=sm.symbols('A,M,V,Ai,Aiv,Apro,Aprom,Mpro,Aco,Mt,Vt,Ait,Aitv,Apromt,Acot')
 
 L=1+(A+Ai+Aiv+Apro+Aprom+Aco+Ait+Aitv+Apromt+Acot)/K #Crecimiento logístico
-
-dA=(A*(r-(beta*L)))-(gamma*M*A)-(kappa*V*A)-(delta*A*M*V)-(gamma*Mpro*A)-(gamma*Mt*A)-((delta*A*((Vt* M) + (V* Mt) + (Vt* Mt))))
-
+    
+dA=(A*(r-(beta*L)))+((0.5*r)*(Ai+Aiv+Apro+Aco+Ait+Aitv+Acot))-(gamma*M*A)-(kappa*V*A)-(delta*A*M*V)-(gamma*Mpro*A)-(gamma*Mt*A)-((delta*A*((Vt* M) + (V* Mt) + (Vt* Mt))))
+    
 dM=(nu*Aco)+(zeta*Ai)-(gamma*M*A)-(delta*A*M*V)-(gamma*Apro*M)-(eta*M)-(delta *A *Vt* M)
-
+    
 dV= (iota*Aiv)+(nu*Aco)+(mu*Aprom)-(epsilon*Ai*V)-(kappa*V*A)-(delta*A*M*V)-(delta*Mt*V)-(lamda*V)-(epsilon*Ait*V)
-
-dAi=(gamma*M*A)-(rho*L*Ai)-(epsilon*Ai*V)-(epsilon*Vt*Ai)
-
-dAiv=(epsilon*Ai*V)-(sigma*L*Aiv)
-
+        
+dAi=(gamma*M*A)+(Ai*((r*0.5)-(rho*L)))-(epsilon*Ai*V)-(epsilon*Vt*Ai)
+        
+dAiv=(epsilon*Ai*V)+(Aiv*(r-(sigma*L)))
+        
 dApro=(Apro*(r-(beta*L)))+(kappa*V*A)-(gamma*M*Apro)-(gamma*Mt*Apro)
-
+        
 dAprom=(gamma*M*Apro)-(tau*L*Aprom)
-
+    
 dMpro=(nu*Aco)-(phi*Mpro)-(gamma*Mpro*A)
-
-dAco=(delta*A*M*V)+(gamma*Mpro*A)-(chi*L*Aco)
-
-dMt= (zeta2 * Ait* Mt) + (zeta3 * Aitv)  + (nu2* Aco) - (gamma* Mt* (A+Apro))-(delta*Mt*V)-(delta*Mt*Vt) - (eta* Mt)
-
-dVt= (mu2*Apromt) + (iota3* Aitv)  +  (nu2* Aco)- (epsilon *Vt *(Ai+Ait))-(delta*M*Vt)-(delta*Mt*Vt)-(lamda *Vt)
-
-dAit= (gamma* ((Mt*A) + Apro )) - (rho*L*Ait)  - (epsilon* Ait * (V+Vt))
-
-dAitv= (epsilon*(Vt*(Ai+ Ait) + (V *Ait) ))- (sigma*L*Aitv) 
-
+        
+dAco=(delta*A*M*V)+(gamma*Mpro*A)+ (Aco*(r-(chi*L)))
+        
+dMt= (zeta2 * Ait) + (zeta3 * Aitv)  + (nu2* Acot) - (gamma* Mt*A)-(gamma* Mt*Apro)-(delta*Mt*V*A)-(delta*Mt*Vt*A) - (eta* Mt)
+        
+dVt= (mu2*Apromt)+ (iota3* Aitv)  +  (nu2* Acot)- (epsilon *Vt *(Ai+Ait))-(delta*M*Vt)-(delta*Mt*Vt)-(lamda *Vt)
+        
+dAit= (gamma* ((Mt*A) + (Apro*Mt) ))+(Ait*((r*0.5)-(rho*L))) -(epsilon* Ait * (V+Vt))
+        
+dAitv= (epsilon*Vt*Ai) +(epsilon*Vt*Ait) + (epsilon*V*Ait) -(Aitv*(r-(sigma*L)))
+        
 dApromt= (gamma* Apro * Mt) - (tau *L* Apromt)
-
-dAcot=(delta *A *((Vt* M) + (V* Mt) + (Vt* Mt))) - (chi*L*Acot)
+        
+dAcot=(delta *A *((Vt* M) + (V* Mt) + (Vt* Mt)))+ (Acot*(r-(chi*L)))
 
 #Usando Eq para que resuelva con respecto  a 0.
 AEqn=sm.Eq(dA,0)
